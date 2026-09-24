@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · GolfCart</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/GolfCart.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @inject GolfCart.Services.ICartService Cart
+    <header class="site-header">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index"><span>GOLF</span>CART</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav ms-auto align-items-sm-center">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Catálogo</a>
+                        </li>
+                        @if (User.IsInRole(ApplicationRoles.Admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Admin" asp-action="Index">Inventario</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link cart-link" asp-controller="Cart" asp-action="Index">Carrito <span>@Cart.Count</span></a>
+                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
+                                    <button class="nav-link" type="submit">Salir</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Acceder</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container page-content">
+        @if (TempData["CartMessage"] is string cartMessage)
+        {
+            <div class="alert alert-success">@cartMessage</div>
+        }
+        @if (TempData["CartError"] is string cartError)
+        {
+            <div class="alert alert-danger">@cartError</div>
+        }
+        @if (TempData["AdminMessage"] is string adminMessage)
+        {
+            <div class="alert alert-success">@adminMessage</div>
+        }
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            &copy; 2026 GolfCart · Bolas de golf usadas, listas para otra vuelta.
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

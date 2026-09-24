@@ -1,0 +1,51 @@
+@model CartViewModel
+@{
+    ViewData["Title"] = "Tu carrito";
+}
+
+<div class="page-heading">
+    <p class="eyebrow">TU SELECCIÓN</p>
+    <h1>Carrito</h1>
+</div>
+
+@if (Model.Items.Count == 0)
+{
+    <div class="empty-state">
+        <h2>Tu carrito está vacío</h2>
+        <p>Encuentra bolas de la calidad que necesitas para tu próxima ronda.</p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-accent">Ir al catálogo</a>
+    </div>
+}
+else
+{
+    <div class="cart-layout">
+        <div class="cart-lines">
+            @foreach (var item in Model.Items)
+            {
+                <article class="cart-line">
+                    <div>
+                        <h3>@item.Description</h3>
+                        <span>@item.UnitPrice.ToString("C") por lote</span>
+                    </div>
+                    <form asp-action="Update" method="post" class="quantity-form">
+                        <input type="hidden" name="productId" value="@item.ProductId" />
+                        <label class="visually-hidden" for="quantity-@item.ProductId">Cantidad</label>
+                        <input id="quantity-@item.ProductId" name="quantity" type="number" min="1" value="@item.Quantity" />
+                        <button class="text-button" type="submit">Actualizar</button>
+                    </form>
+                    <strong>@item.Total.ToString("C")</strong>
+                    <form asp-action="Remove" method="post">
+                        <input type="hidden" name="productId" value="@item.ProductId" />
+                        <button class="text-button danger" type="submit">Quitar</button>
+                    </form>
+                </article>
+            }
+        </div>
+        <aside class="order-summary">
+            <span>Resumen</span>
+            <div><strong>Total</strong><strong>@Model.Total.ToString("C")</strong></div>
+            <small>El stock se valida de nuevo al confirmar el pedido.</small>
+            <a asp-action="Checkout" class="btn btn-accent w-100">Continuar</a>
+        </aside>
+    </div>
+}

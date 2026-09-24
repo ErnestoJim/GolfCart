@@ -1,0 +1,40 @@
+@model IReadOnlyList<GolfBallProduct>
+@{
+    ViewData["Title"] = "Inventario";
+}
+
+<div class="admin-heading">
+    <div>
+        <p class="eyebrow">ÁREA DE ADMINISTRACIÓN</p>
+        <h1>Inventario</h1>
+        <p>Añade lotes y ajusta el stock real antes de vender.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-accent">Añadir producto</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty-state">No hay productos. Añade el primer lote para comenzar.</div>
+}
+else
+{
+    <div class="inventory-table-wrap">
+        <table class="inventory-table">
+            <thead><tr><th>Marca</th><th>Calidad</th><th>Lote</th><th>Precio</th><th>Stock</th><th>Estado</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td><strong>@product.Brand</strong></td>
+                    <td><span class="grade-pill">@product.Grade.GetDisplayName()</span></td>
+                    <td>@product.PackSize bolas</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td class="@(product.StockPacks == 0 ? "out-of-stock" : "")">@product.StockPacks lotes</td>
+                    <td>@(product.IsActive ? "Visible" : "Oculto")</td>
+                    <td><a asp-action="Edit" asp-route-id="@product.Id" class="text-button">Editar</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

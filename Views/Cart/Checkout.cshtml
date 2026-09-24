@@ -1,0 +1,15 @@
+@model CartViewModel
+@{
+    ViewData["Title"] = "Confirmar pedido";
+}
+
+<div class="checkout-card">
+    <p class="eyebrow">ÚLTIMO PASO</p>
+    <h1>Confirma el pedido</h1>
+    <p>Esta primera versión registra el pedido y descuenta el stock. El pago y los datos de envío se añadirán en el siguiente paso del proyecto.</p>
+    <div class="checkout-total"><span>Total del pedido</span><strong>@Model.Total.ToString("C")</strong></div>
+    <form asp-action="ConfirmCheckout" method="post">
+        <button class="btn btn-accent" type="submit">Confirmar pedido de prueba</button>
+        <a asp-action="Index" class="btn btn-outline">Volver al carrito</a>
+    </form>
+</div>

@@ -1,0 +1,27 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Acceso administrador";
+}
+
+<div class="login-card">
+    <p class="eyebrow">ÁREA PRIVADA</p>
+    <h1>Acceso administrador</h1>
+    <p>Gestiona el inventario disponible de GolfCart.</p>
+    <form asp-action="Login" method="post" class="login-form">
+        <input asp-for="ReturnUrl" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <div>
+            <label asp-for="Email"></label>
+            <input asp-for="Email" autocomplete="username" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div>
+            <label asp-for="Password"></label>
+            <input asp-for="Password" autocomplete="current-password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <label class="checkbox-label"><input asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)</label>
+        <button type="submit" class="btn btn-accent">Iniciar sesión</button>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

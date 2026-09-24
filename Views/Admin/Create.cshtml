@@ -1,0 +1,15 @@
+@model GolfBallProduct
+@{
+    ViewData["Title"] = "Añadir producto";
+}
+<div class="form-page">
+    <p class="eyebrow">INVENTARIO</p>
+    <h1>Añadir lote</h1>
+    <p>Un producto representa un lote de bolas de una marca y calidad concretas.</p>
+    <form asp-action="Create" method="post" class="product-form">
+        <partial name="_ProductForm" model="Model" />
+        <button class="btn btn-accent" type="submit">Guardar producto</button>
+        <a asp-action="Index" class="btn btn-outline">Cancelar</a>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

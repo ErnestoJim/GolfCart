@@ -1,0 +1,75 @@
+@model CatalogViewModel
+@{
+    ViewData["Title"] = "Bolas de golf usadas";
+}
+
+<section class="hero">
+    <p class="eyebrow">BOLAS RECUPERADAS · LISTAS PARA JUGAR</p>
+    <h1>Juega más.<br /><em>Gasta mejor.</em></h1>
+    <p>Marcas de confianza, clasificadas una a una y disponibles por lote.</p>
+    <a class="btn btn-accent" href="#catalogo">Ver bolas disponibles</a>
+</section>
+
+<section id="catalogo" class="catalog-section">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">CATÁLOGO</p>
+            <h2>Elige tu siguiente ronda</h2>
+        </div>
+        <span class="result-count">@Model.Products.Count opciones disponibles</span>
+    </div>
+
+    <form method="get" class="filters">
+        <select name="brand" aria-label="Filtrar por marca">
+            <option value="">Todas las marcas</option>
+            @foreach (var brand in Model.Brands)
+            {
+                <option value="@brand" selected="@(Model.Brand == brand)">@brand</option>
+            }
+        </select>
+        <select name="grade" aria-label="Filtrar por calidad">
+            <option value="">Todas las calidades</option>
+            @foreach (var grade in Enum.GetValues<GolfBallGrade>())
+            {
+                <option value="@grade" selected="@(Model.Grade == grade)">@grade.GetDisplayName()</option>
+            }
+        </select>
+        <button class="btn btn-outline" type="submit">Filtrar</button>
+        @if (Model.Brand is not null || Model.Grade is not null)
+        {
+            <a asp-action="Index" class="clear-filter">Limpiar</a>
+        }
+    </form>
+
+    @if (Model.Products.Count == 0)
+    {
+        <div class="empty-state">No hay bolas disponibles con esos filtros. Prueba otra combinación.</div>
+    }
+    else
+    {
+        <div class="product-grid">
+            @foreach (var product in Model.Products)
+            {
+                <article class="product-card">
+                    <div class="ball-mark">@product.Brand[..1].ToUpperInvariant()</div>
+                    <div class="product-card__body">
+                        <div class="product-meta">
+                            <span class="grade-pill">@product.Grade.GetDisplayName()</span>
+                            <span>@product.StockPacks lotes</span>
+                        </div>
+                        <h3>@product.Brand</h3>
+                        <p>Lote de @product.PackSize bolas</p>
+                        <div class="product-card__footer">
+                            <strong>@product.Price.ToString("C")</strong>
+                            <form asp-controller="Cart" asp-action="Add" method="post">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button class="btn btn-dark" type="submit">Añadir</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>

@@ -1,0 +1,18 @@
+@model Order
+@{
+    ViewData["Title"] = "Pedido confirmado";
+}
+
+<div class="confirmation-card">
+    <p class="eyebrow">PEDIDO REGISTRADO</p>
+    <h1>¡Gracias por tu pedido!</h1>
+    <p>Pedido #@Model.Id · @Model.CreatedAtUtc.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+    <ul>
+        @foreach (var line in Model.Lines)
+        {
+            <li><span>@line.Quantity × @line.Description</span><strong>@line.LineTotal.ToString("C")</strong></li>
+        }
+    </ul>
+    <div class="checkout-total"><span>Total</span><strong>@Model.Total.ToString("C")</strong></div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-accent">Seguir comprando</a>
+</div>
